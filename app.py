@@ -119,7 +119,7 @@ if uploaded_file is not None and api_key:
                 llm=custom_llm
             )
             
-            # --- TASK DEFINTIONS WITH EXACT CONSTRAINTS ---
+            # --- TASK DEFINITIONS WITH EXACT CONSTRAINTS ---
             status.write("📋 Injecting cross-channel execution directives...")
             analysis_task = Task(
                 description=f"""Analyze the following verified metric breakdown extracted directly from the performance spreadsheet:
@@ -175,7 +175,7 @@ if uploaded_file is not None and api_key:
                 1. Real Channel Allocation Splits applying the conditional guardrail rules, 
                 2. Granular Audience Targeting profiles for the winning channels, and 
                 3. A data-backed 30-day scaling timeline quoting exact metrics.""",
-                media_buyer_agent,
+                agent=media_buyer_agent,
                 context=[analysis_task, creative_task]
             )
             
