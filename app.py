@@ -263,7 +263,17 @@ elif studio_mode == "🏔️ Live Operations Tower (Virtual COO)":
         )
         active_skus = st.text_input("Active SKUs Under Focus:", "Badri A2 Ghee, Wild Forest Honey, Rhododendron Infusion")
     with col2:
-        target_export_zone = st.selectbox("Target Global Expansion Zone:", ["North America (USA/Canada)", "Middle East (GCC - Dubai/Riyadh)", "European Union"])
+        target_export_zone = st.selectbox(
+            "Target Global Expansion Zone:", 
+            [
+                "Middle East (GCC - Dubai/Riyadh/Kuwait)", 
+                "Southeast Asia (ASEAN - Singapore/Malaysia/Thailand)",
+                "East Asia (Japan/South Korea)",
+                "Indian Subcontinent Cross-Border (Nepal/Bangladesh/Sri Lanka)",
+                "North America (USA/Canada)", 
+                "European Union (EU)"
+            ]
+        )
         daily_notes = st.text_area("Live Field Notes / Production Updates:", placeholder="e.g., Munsiyari cluster reports a 12% moisture spike in the current Rajma harvest.")
 
     if st.session_state.coo_output is None:
@@ -299,8 +309,8 @@ elif studio_mode == "🏔️ Live Operations Tower (Virtual COO)":
 
                     horizon3_task = Task(
                         description=f"""Build a 3-year international scaling roadmap targeting {target_export_zone}. 
-                        Detail the exact regulatory requirements (e.g., US FDA facility registration, APEDA clearance lanes, GCC labeling compliance), export logistics networks, and product modifications needed for international wellness channels.""",
-                        expected_output="A step-by-step global export expansion blueprint detailing regulatory compliance and logistics strategy.",
+                        Detail the exact regulatory requirements (e.g., Saudi Food & Drug Authority (SFDA) portal registrations, Singapore Food Agency (SFA) clearings, Halal compliance certifications like JAKIM/MUI, SAFTA tariff exemptions, or APEDA phytosanitary certificates), export logistics networks, and product modifications needed for high-end international and regional wellness channels.""",
+                        expected_output="A step-by-step global export expansion blueprint detailing regulatory compliance, trade treaties, and logistics strategy.",
                         agent=virtual_coo,
                         context=[horizon2_task]
                     )
@@ -356,7 +366,7 @@ if st.session_state.performance_output or st.session_state.brand_output or st.se
                 data_source_context = "Brand Incubation Form Entries"
             else:
                 active_context = st.session_state.coo_output
-                data_source_context = "Live Operational Bottlenecks and Export Parameters"
+                data_source_context = f"Bottleneck: {current_bottleneck} | Target Export: {target_export_zone}"
             
             system_prompt = f"""You are the managing partner of an elite Multi-Agent Growth & Brand Bureau.
             You have access to the initial system context inputs:
