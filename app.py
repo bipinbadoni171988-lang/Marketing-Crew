@@ -246,25 +246,26 @@ elif studio_mode == "✨ Brand Creation Studio":
 # ==============================================================================
 elif studio_mode == "🏔️ Live Operations Tower (Virtual COO)":
     st.title("🏔️ Virtual COO & Global Scaling Control Tower")
-    st.subheader("Manage everyday operations, processing pipelines, and international export channels.")
+    st.subheader("Manage domestic optimization across India channels alongside international export pipelines.")
     st.markdown("---")
 
     col1, col2 = st.columns(2)
     with col1:
         current_bottleneck = st.selectbox(
-            "Identify Current Operational Bottleneck:",
+            "Identify Active Operational Bottleneck:",
             [
-                "Q-Commerce Out-of-Stock Issues",
+                "Q-Commerce Out-of-Stock / Dark Store SLA Penalties",
+                "Airport Kiosk & Luxury Hotel Stockout Friction",
                 "Decentralized SHG Processing Variances",
                 "Packaging Degradation & Shelf-Life Limits",
-                "Export Regulatory Compliance (US FDA / GCC Ports)",
-                "Dynamic Margin Inefficiencies"
+                "Social Media ROAS & Customer Acquisition (CAC) Spikes",
+                "Export Regulatory Compliance (SFDA / SFA / US FDA)"
             ]
         )
-        active_skus = st.text_input("Active SKUs Under Focus:", "Badri A2 Ghee, Wild Forest Honey, Rhododendron Infusion")
+        active_skus = st.text_input("Active SKUs Under Focus:", "Badri A2 Ghee, Wild Forest Honey, Rhododendron Infusion, Himalayan Grains")
     with col2:
         target_export_zone = st.selectbox(
-            "Target Global Expansion Zone:", 
+            "Target Global Expansion Zone (Asia, Indian Subcontinent & Global):", 
             [
                 "Middle East (GCC - Dubai/Riyadh/Kuwait)", 
                 "Southeast Asia (ASEAN - Singapore/Malaysia/Thailand)",
@@ -274,43 +275,62 @@ elif studio_mode == "🏔️ Live Operations Tower (Virtual COO)":
                 "European Union (EU)"
             ]
         )
-        daily_notes = st.text_area("Live Field Notes / Production Updates:", placeholder="e.g., Munsiyari cluster reports a 12% moisture spike in the current Rajma harvest.")
+        selected_channels = st.multiselect(
+            "Target Domestic India Channels to Optimize:",
+            [
+                "Quick Commerce (Blinkit, Zepto, Instamart)",
+                "E-Commerce (Amazon, Flipkart, Native Storefront)",
+                "Social Media Commerce (Instagram Shop, Meta Direct Response Ads)",
+                "Premium Airport Kiosks (Delhi, Mumbai, Dehradun Hubs)",
+                "Luxury Hotel Outlets (Taj, Ananda, Oberoi Spa & Wellness Lounges)",
+                "Premium Lifestyle Malls (Delhi NCR, Mumbai, Bengaluru)",
+                "Offline Modern Trade (Nature's Basket, Foodhall/Le Marche)"
+            ],
+            default=["Quick Commerce (Blinkit, Zepto, Instamart)", "Premium Airport Kiosks (Delhi, Mumbai, Dehradun Hubs)", "Luxury Hotel Outlets (Taj, Ananda, Oberoi Spa & Wellness Lounges)"]
+        )
+
+    daily_notes = st.text_area("Live Field Notes / Production Updates:", placeholder="e.g., Munsiyari cluster reports a 12% moisture spike in the current harvest; Quick Commerce velocity in Delhi NCR dark stores up by 35%.")
 
     if st.session_state.coo_output is None:
         if st.button("🚀 Boot Virtual COO Engine", type="primary"):
             if api_key:
                 with st.status("⚙️ Activating Virtual COO Control Tower...", expanded=True) as status:
                     
+                    channels_str = ", ".join(selected_channels) if selected_channels else "All Core Indian Retail Footprints"
+                    
+                    # Define Super Agent
                     virtual_coo = Agent(
-                        role="Virtual Chief Operating Officer & Global Scaling Director",
-                        goal="Manage daily execution metrics, eliminate supply chain bottlenecks, and scale processing architectures for global export markets.",
-                        backstory="An elite consumer goods operations chief with deep expertise scaling FMCG supply chains. Expert at connecting rural manufacturing clusters with quick-commerce platforms and international customs infrastructure.",
+                        role="Virtual Chief Operating Officer & Domestic/Global Scaling Director",
+                        goal="Maximize supply chain performance and inventory fill rates across domestic Indian channels and international export networks.",
+                        backstory="An elite consumer goods operations chief with deep expertise managing premium omni-channel retail deployments, fast-moving quick commerce dark stores, and complex cross-border logistics.",
                         verbose=True,
                         llm=custom_llm
                     )
 
+                    # Task 1: 48-Hour Fixes
                     horizon1_task = Task(
-                        description=f"""Analyze the current operational bottleneck: {current_bottleneck}.
-                        Using the active SKUs ({active_skus}) and field updates ({daily_notes}), design an immediate mitigation protocol for the next 24-48 hours. 
-                        Focus on maintaining quick-commerce dark store fill rates and stabilizing SHG procurement quality metrics.""",
-                        expected_output="An immediate 48-hour tactical action plan resolving active supply chain and inventory friction.",
+                        description=f"""Analyze the operational bottleneck: '{current_bottleneck}'.
+                        Using active SKUs ({active_skus}) and field updates ({daily_notes}), design a tactical 48-hour mitigation plan. 
+                        Ensure dark store fill rates on quick commerce remain stable and coordinate immediate restock guidelines for high-visibility domestic touchpoints: {channels_str}.""",
+                        expected_output="An immediate 48-hour tactical action plan resolving domestic retail and inventory friction.",
                         agent=virtual_coo
                     )
 
+                    # Task 2: 90-Day Optimization (Focused on India channels optimization)
                     horizon2_task = Task(
-                        description=f"""Develop a 90-day systemic optimization plan focused on:
-                        1. Processing standardization across procurement clusters.
-                        2. Transitioning to high-barrier nitrogen-flush packaging systems to extend product shelf life to 12+ months.
-                        3. Pricing and margin protection to ensure a 60%+ gross margin across all premium digital channels.""",
-                        expected_output="A structured 90-day operational optimization playbook covering processing, packaging, and unit economics.",
+                        description=f"""Develop a 90-day systemic optimization plan for the selected domestic Indian channels: {channels_str}.
+                        Provide actionable strategies to run successful campaigns on social media, optimize inventory for airport kiosks, premium malls, and luxury hotel outlets, and streamline quick commerce dark store storage. 
+                        Ensure product presentation, premium packaging standards, and product pricing models protect a 60%+ gross margin across all channels.""",
+                        expected_output="A structured 90-day domestic commercial playbook detailing omni-channel and retail operations.",
                         agent=virtual_coo,
                         context=[horizon1_task]
                     )
 
+                    # Task 3: 3-Year Scaling Architecture (Cross-Border + Local Ecosystem Maturity)
                     horizon3_task = Task(
-                        description=f"""Build a 3-year international scaling roadmap targeting {target_export_zone}. 
-                        Detail the exact regulatory requirements (e.g., Saudi Food & Drug Authority (SFDA) portal registrations, Singapore Food Agency (SFA) clearings, Halal compliance certifications like JAKIM/MUI, SAFTA tariff exemptions, or APEDA phytosanitary certificates), export logistics networks, and product modifications needed for high-end international and regional wellness channels.""",
-                        expected_output="A step-by-step global export expansion blueprint detailing regulatory compliance, trade treaties, and logistics strategy.",
+                        description=f"""Build a 3-year growth and expansion roadmap that balances national scale across India with international entry into {target_export_zone}.
+                        Detail how to scale physical footprints in prime transportation hubs (airports) and luxury tourist properties (hotels), while managing international compliance criteria (SFDA, SFA, Halal approvals, or US FDA registrations) and regional trade agreements like SAFTA.""",
+                        expected_output="A step-by-step cross-border expansion blueprint aligning domestic scale with global markets.",
                         agent=virtual_coo,
                         context=[horizon2_task]
                     )
@@ -331,7 +351,7 @@ elif studio_mode == "🏔️ Live Operations Tower (Virtual COO)":
         st.download_button(
             label="💾 Download Operational Playbook (.md)",
             data=st.session_state.coo_output,
-            file_name="Himalayas_Operations_Playbook.md",
+            file_name="Himalayas_Omnichannel_Operations_Playbook.md",
             mime="text/markdown"
         )
 
@@ -365,8 +385,9 @@ if st.session_state.performance_output or st.session_state.brand_output or st.se
                 active_context = st.session_state.brand_output
                 data_source_context = "Brand Incubation Form Entries"
             else:
+                channels_str = ", ".join(selected_channels) if selected_channels else "All Indian Channels"
                 active_context = st.session_state.coo_output
-                data_source_context = f"Bottleneck: {current_bottleneck} | Target Export: {target_export_zone}"
+                data_source_context = f"Bottleneck: {current_bottleneck} | India Channels: {channels_str} | Target Export: {target_export_zone}"
             
             system_prompt = f"""You are the managing partner of an elite Multi-Agent Growth & Brand Bureau.
             You have access to the initial system context inputs:
