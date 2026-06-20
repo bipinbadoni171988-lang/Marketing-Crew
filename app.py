@@ -21,6 +21,8 @@ if "performance_output" not in st.session_state:
     st.session_state.performance_output = None
 if "brand_output" not in st.session_state:
     st.session_state.brand_output = None
+if "coo_output" not in st.session_state:
+    st.session_state.coo_output = None
 if "excel_context" not in st.session_state:
     st.session_state.excel_context = ""
 if "chat_history" not in st.session_state:
@@ -38,13 +40,18 @@ else:
 st.sidebar.markdown("### 🛠️ Select Workspace Engine")
 studio_mode = st.sidebar.radio(
     "Choose your operational workflow:",
-    ["📊 Performance Optimizer", "✨ Brand Creation Studio"]
+    [
+        "📊 Performance Optimizer", 
+        "✨ Brand Creation Studio",
+        "🏔️ Live Operations Tower (Virtual COO)"
+    ]
 )
 
 st.sidebar.markdown("---")
 if st.sidebar.button("🧹 Clear Active Workspace"):
     st.session_state.performance_output = None
     st.session_state.brand_output = None
+    st.session_state.coo_output = None
     st.session_state.excel_context = ""
     st.session_state.chat_history = []
     st.rerun()
@@ -152,7 +159,6 @@ elif studio_mode == "✨ Brand Creation Studio":
     st.subheader("Build a market-disrupting brand identity, core messaging architecture, and visual direction from scratch.")
     st.markdown("---")
 
-    # Brand Core Input Form Elements
     col1, col2 = st.columns(2)
     with col1:
         input_brand_idea = st.text_input("Brand Working Name / Functional Idea:", placeholder="e.g., 'AuraSleep' or 'An eco-friendly custom running shoe network'")
@@ -170,7 +176,6 @@ elif studio_mode == "✨ Brand Creation Studio":
             elif api_key:
                 with st.status("🧪 Incubating brand architecture components...", expanded=True) as status:
                     
-                    # Brand Creation Agent Council
                     brand_strategist = Agent(
                         role="Principal Brand Strategist & Market Architect",
                         goal="Formulate high-leverage brand positioning, market whitespace definition, and strategic positioning models.",
@@ -190,7 +195,6 @@ elif studio_mode == "✨ Brand Creation Studio":
                         verbose=True, llm=custom_llm
                     )
 
-                    # Multi-Tier Brand Building Directive
                     b_task1 = Task(
                         description=f"""Analyze these conceptual foundation vectors:
                         - Working Concept Name: {input_brand_idea}
@@ -237,11 +241,95 @@ elif studio_mode == "✨ Brand Creation Studio":
         st.markdown(st.session_state.brand_output)
         st.download_button("💾 Download Brand Identity Playbook (.md)", st.session_state.brand_output, "Brand_Identity_Playbook.md", "text/markdown")
 
+# ==============================================================================
+# ENGINE 3: LIVE OPERATIONS TOWER (VIRTUAL COO)
+# ==============================================================================
+elif studio_mode == "🏔️ Live Operations Tower (Virtual COO)":
+    st.title("🏔️ Virtual COO & Global Scaling Control Tower")
+    st.subheader("Manage everyday operations, processing pipelines, and international export channels.")
+    st.markdown("---")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        current_bottleneck = st.selectbox(
+            "Identify Current Operational Bottleneck:",
+            [
+                "Q-Commerce Out-of-Stock Issues",
+                "Decentralized SHG Processing Variances",
+                "Packaging Degradation & Shelf-Life Limits",
+                "Export Regulatory Compliance (US FDA / GCC Ports)",
+                "Dynamic Margin Inefficiencies"
+            ]
+        )
+        active_skus = st.text_input("Active SKUs Under Focus:", "Badri A2 Ghee, Wild Forest Honey, Rhododendron Infusion")
+    with col2:
+        target_export_zone = st.selectbox("Target Global Expansion Zone:", ["North America (USA/Canada)", "Middle East (GCC - Dubai/Riyadh)", "European Union"])
+        daily_notes = st.text_area("Live Field Notes / Production Updates:", placeholder="e.g., Munsiyari cluster reports a 12% moisture spike in the current Rajma harvest.")
+
+    if st.session_state.coo_output is None:
+        if st.button("🚀 Boot Virtual COO Engine", type="primary"):
+            if api_key:
+                with st.status("⚙️ Activating Virtual COO Control Tower...", expanded=True) as status:
+                    
+                    virtual_coo = Agent(
+                        role="Virtual Chief Operating Officer & Global Scaling Director",
+                        goal="Manage daily execution metrics, eliminate supply chain bottlenecks, and scale processing architectures for global export markets.",
+                        backstory="An elite consumer goods operations chief with deep expertise scaling FMCG supply chains. Expert at connecting rural manufacturing clusters with quick-commerce platforms and international customs infrastructure.",
+                        verbose=True,
+                        llm=custom_llm
+                    )
+
+                    horizon1_task = Task(
+                        description=f"""Analyze the current operational bottleneck: {current_bottleneck}.
+                        Using the active SKUs ({active_skus}) and field updates ({daily_notes}), design an immediate mitigation protocol for the next 24-48 hours. 
+                        Focus on maintaining quick-commerce dark store fill rates and stabilizing SHG procurement quality metrics.""",
+                        expected_output="An immediate 48-hour tactical action plan resolving active supply chain and inventory friction.",
+                        agent=virtual_coo
+                    )
+
+                    horizon2_task = Task(
+                        description=f"""Develop a 90-day systemic optimization plan focused on:
+                        1. Processing standardization across procurement clusters.
+                        2. Transitioning to high-barrier nitrogen-flush packaging systems to extend product shelf life to 12+ months.
+                        3. Pricing and margin protection to ensure a 60%+ gross margin across all premium digital channels.""",
+                        expected_output="A structured 90-day operational optimization playbook covering processing, packaging, and unit economics.",
+                        agent=virtual_coo,
+                        context=[horizon1_task]
+                    )
+
+                    horizon3_task = Task(
+                        description=f"""Build a 3-year international scaling roadmap targeting {target_export_zone}. 
+                        Detail the exact regulatory requirements (e.g., US FDA facility registration, APEDA clearance lanes, GCC labeling compliance), export logistics networks, and product modifications needed for international wellness channels.""",
+                        expected_output="A step-by-step global export expansion blueprint detailing regulatory compliance and logistics strategy.",
+                        agent=virtual_coo,
+                        context=[horizon2_task]
+                    )
+
+                    coo_crew = Crew(
+                        agents=[virtual_coo],
+                        tasks=[horizon1_task, horizon2_task, horizon3_task],
+                        verbose=True
+                    )
+                    
+                    st.session_state.coo_output = str(coo_crew.kickoff())
+                    status.update(label="✅ Operational Playbook Synthesized!", state="complete")
+                st.rerun()
+
+    if st.session_state.coo_output:
+        st.markdown("## 📊 Strategic Operations & Scaling Playbook")
+        st.markdown(st.session_state.coo_output)
+        st.download_button(
+            label="💾 Download Operational Playbook (.md)",
+            data=st.session_state.coo_output,
+            file_name="Himalayas_Operations_Playbook.md",
+            mime="text/markdown"
+        )
+
 
 # ==============================================================================
 # UNIFIED INTERACTIVE WORKSPACE TERMINAL (Maintains Context of Active Engine)
 # ==============================================================================
-if st.session_state.performance_output or st.session_state.brand_output:
+if st.session_state.performance_output or st.session_state.brand_output or st.session_state.coo_output:
     st.markdown("---")
     st.markdown("## 💬 Interactive Workspace: Task Your Bureau")
     st.markdown("Issue follow-up commands to refine, spin off alternative configurations, or generate complementary campaign documents based on the active report context above.")
@@ -251,7 +339,7 @@ if st.session_state.performance_output or st.session_state.brand_output:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    if user_command := st.chat_input("Ex: 'Create an Instagram launch content calendar for this brand' or 'Write a pitch deck outline based on this position'"):
+    if user_command := st.chat_input("Ex: 'Create an Instagram launch content calendar' or 'Write a custom shipping SOP based on Horizon 1'"):
         with st.chat_message("user"):
             st.markdown(user_command)
         st.session_state.chat_history.append({"role": "user", "content": user_command})
@@ -260,8 +348,15 @@ if st.session_state.performance_output or st.session_state.brand_output:
             follow_up_llm = LLM(model="openai/gpt-4o", api_key=api_key, base_url="https://api.ainative.studio/v1")
             
             # Select proper context reference points for memory continuity
-            active_context = st.session_state.performance_output if studio_mode == "📊 Performance Optimizer" else st.session_state.brand_output
-            data_source_context = st.session_state.excel_context if studio_mode == "📊 Performance Optimizer" else "Brand Incubation Form Entries"
+            if studio_mode == "📊 Performance Optimizer":
+                active_context = st.session_state.performance_output
+                data_source_context = st.session_state.excel_context
+            elif studio_mode == "✨ Brand Creation Studio":
+                active_context = st.session_state.brand_output
+                data_source_context = "Brand Incubation Form Entries"
+            else:
+                active_context = st.session_state.coo_output
+                data_source_context = "Live Operational Bottlenecks and Export Parameters"
             
             system_prompt = f"""You are the managing partner of an elite Multi-Agent Growth & Brand Bureau.
             You have access to the initial system context inputs:
